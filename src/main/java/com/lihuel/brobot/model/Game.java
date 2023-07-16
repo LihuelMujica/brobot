@@ -9,11 +9,9 @@ import lombok.Data;
 public class Game {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String steamId;
     private Boolean hasPiratedMultiplayer;
     private String name;
-    private String steamId;
     private String steamUrl;
 
 }
