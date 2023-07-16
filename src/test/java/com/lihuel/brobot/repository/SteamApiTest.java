@@ -14,29 +14,29 @@ class SteamApiTest {
 
     @Test
     void getCounterStrikeGlobalOffensiveDetails() throws SteamApiException {
-        SteamGameDTO.GameDetails gameDetails = steamApi.getAppDetails(730L).getData();
+        SteamGameDTO.GameDetails gameDetails = steamApi.getAppDetails("730").getData();
         assertEquals("Counter-Strike: Global Offensive", gameDetails.getName());
     }
 
     @Test
     void getLeft4Dead2Details() throws SteamApiException {
-        SteamGameDTO.GameDetails gameDetails = steamApi.getAppDetails(550L).getData();
+        SteamGameDTO.GameDetails gameDetails = steamApi.getAppDetails("550").getData();
         assertEquals("Left 4 Dead 2", gameDetails.getName());
     }
 
     @Test
     void sendInvalidAppId() {
-        assertThrows(FeignException.class, () -> steamApi.getAppDetails(0L));
+        assertThrows(FeignException.class, () -> steamApi.getAppDetails("0"));
     }
 
     @Test
     void sendInvalidAppId2() {
-        assertThrows(FeignException.class, () -> steamApi.getAppDetails(-1L));
+        assertThrows(FeignException.class, () -> steamApi.getAppDetails("-1"));
     }
 
     @Test
     void gettingUnknownApp() {
-        assertThrows(SteamApiException.class, () -> steamApi.getAppDetails(999999999999999999L));
+        assertThrows(SteamApiException.class, () -> steamApi.getAppDetails("999999999999999999"));
     }
 
 

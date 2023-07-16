@@ -16,14 +16,14 @@ public class SteamApi {
 
     private interface SteamStoreApi {
         @RequestLine("GET /api/appdetails?appids={appid}")
-        Map<Long, SteamGameDTO> getAppDetails(@Param("appid") long appid);
+        Map<String, SteamGameDTO> getAppDetails(@Param("appid") String appid);
     }
 
 
     private final SteamStoreApi steamStoreApi = Feign.builder().decoder(new SteamStoreDecoder()).target(SteamStoreApi.class, "https://store.steampowered.com");
 
-    public SteamGameDTO getAppDetails(Long appid) throws FeignException, SteamApiException {
-        Map<Long, SteamGameDTO> appdetails =  steamStoreApi.getAppDetails(appid);
+    public SteamGameDTO getAppDetails(String appid) throws FeignException, SteamApiException {
+        Map<String, SteamGameDTO> appdetails =  steamStoreApi.getAppDetails(appid);
         if (appdetails.get(appid).getData() == null) throw new SteamApiException("App not found");
         return appdetails.get(appid);
     }

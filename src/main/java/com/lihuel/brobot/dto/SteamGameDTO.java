@@ -19,7 +19,7 @@ public class SteamGameDTO {
     @Data
     public class GameDetails {
         private String name;
-        private Long steam_appid;
+        private String steam_appid;
         private boolean is_free;
         private String header_image;
         private Screenshot[] screenshots;
