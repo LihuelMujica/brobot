@@ -17,7 +17,7 @@ public class SteamGameDTO {
     }
 
     @Data
-    public class GameDetails {
+    public static class GameDetails {
         private String name;
         private String steam_appid;
         private boolean is_free;
@@ -25,25 +25,6 @@ public class SteamGameDTO {
         private Screenshot[] screenshots;
         private PCRequirements pc_requirements;
 
-        public String getName() {
-            return name;
-        }
-
-        public boolean isFree() {
-            return is_free;
-        }
-
-        public String getHeaderImage() {
-            return header_image;
-        }
-
-        public Screenshot[] getScreenshots() {
-            return screenshots;
-        }
-
-        public PCRequirements getPcRequirements() {
-            return pc_requirements;
-        }
     }
 
     @Data
