@@ -1,6 +1,7 @@
 package com.lihuel.brobot.repository;
 
 import com.lihuel.brobot.dto.SteamGameDTO;
+import com.lihuel.brobot.dto.SteamProfileDTO;
 import com.lihuel.brobot.exception.SteamApiException;
 import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +38,18 @@ class SteamApiTest {
     @Test
     void gettingUnknownApp() {
         assertThrows(SteamApiException.class, () -> steamApi.getAppDetails("999999999999999999"));
+    }
+
+    @Test
+    void getSteamProfile() throws SteamApiException {
+        SteamProfileDTO.Player player = steamApi.getSteamProfile("76561198104013274");
+        assertEquals("Lihuel", player.getPersonaname());
+        assertEquals("https://steamcommunity.com/id/lihuel/", player.getProfileurl());
+    }
+
+    @Test
+    void getInvalidProfile() {
+        assertThrows(SteamApiException.class, () -> steamApi.getSteamProfile("0"));
     }
 
 
