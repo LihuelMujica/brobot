@@ -20,7 +20,7 @@ class UserRepositoryTest {
         user.setSteamUserId("123");
         userRepository.save(user);
 
-        User user2 = userRepository.findById(user.getId()).orElse(null);
+        User user2 = userRepository.findById(user.getSteamUserId()).orElse(null);
 
         assertNotNull(user2);
         assertEquals(user.getDiscordId(), user2.getDiscordId());
