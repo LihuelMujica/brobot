@@ -13,4 +13,5 @@ public class User {
     private Integer id;
     private String discordId;
     private String steamUserId;
+    private String steamProfileUrl;
 }
