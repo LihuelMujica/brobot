@@ -9,6 +9,7 @@ import feign.Feign;
 import feign.FeignException;
 import feign.Param;
 import feign.RequestLine;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;
@@ -16,7 +17,8 @@ import java.util.Map;
 @Repository
 public class SteamApi {
 
-    private final String STEAM_KEY = "C4022C2B295FD9C9D7E5D917D632235B";
+    @Value("${steam.token}")
+    private String STEAM_KEY;
 
     private interface SteamStoreApi {
         @RequestLine("GET /api/appdetails?appids={appid}")
