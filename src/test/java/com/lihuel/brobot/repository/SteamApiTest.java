@@ -1,11 +1,14 @@
 package com.lihuel.brobot.repository;
 
 import com.lihuel.brobot.dto.SteamGameDTO;
+import com.lihuel.brobot.dto.SteamOwnedGameDTO;
 import com.lihuel.brobot.dto.SteamProfileDTO;
 import com.lihuel.brobot.exception.SteamApiException;
 import feign.FeignException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,6 +61,14 @@ class SteamApiTest {
     @Test
     void getInvalidProfile() {
         assertThrows(SteamApiException.class, () -> steamApi.getSteamProfile("0"));
+    }
+
+    @Test
+    void getOwnedGamesByUserIdUserLihuelShouldOwnResidentEvil5() throws SteamApiException {
+        Set<SteamOwnedGameDTO.Game> ownedGames = steamApi.getOwnedGames("76561198104013274");
+        SteamOwnedGameDTO.Game game = new SteamOwnedGameDTO.Game();
+        game.setAppId("21690");
+        assertTrue(ownedGames.contains(game));
     }
 
 
