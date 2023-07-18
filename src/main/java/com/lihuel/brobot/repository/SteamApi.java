@@ -1,6 +1,7 @@
 package com.lihuel.brobot.repository;
 
 import com.lihuel.brobot.dto.SteamGameDTO;
+import com.lihuel.brobot.dto.SteamOwnedGameDTO;
 import com.lihuel.brobot.dto.SteamProfileDTO;
 import com.lihuel.brobot.exception.SteamApiException;
 import com.lihuel.brobot.repository.decoder.steam.SteamDevApiDecoder;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;
+import java.util.Set;
 
 @Repository
 public class SteamApi {
@@ -32,6 +34,9 @@ public class SteamApi {
         @RequestLine("GET /ISteamUser/GetPlayerSummaries/v0002/?key={key}&steamids={steamid}&format=json")
         SteamProfileDTO getSteamProfile(@Param("steamid") String steamid, @Param("key") String key);
 
+        @RequestLine("GET /iplayerservice/GetOwnedGames/v0001/?key={key}&steamid={steamid}&format=json&include_appinfo=true")
+        SteamOwnedGameDTO getOwnedGames(@Param("steamid") String steamid, @Param("key") String key);
+
 
     }
 
@@ -50,5 +55,11 @@ public class SteamApi {
         SteamProfileDTO steamProfileDTO = steamDevAPI.getSteamProfile(steamid, STEAM_KEY);
         if (steamProfileDTO.getResponse().getPlayers().length == 0) throw new SteamApiException("User not found");
         return steamProfileDTO.getResponse().getPlayers()[0];
+    }
+
+    public Set<SteamOwnedGameDTO.Game> getOwnedGames(String steamid) throws FeignException, SteamApiException {
+        SteamOwnedGameDTO steamOwnedGameDTO = steamDevAPI.getOwnedGames(steamid, STEAM_KEY);
+        if (steamOwnedGameDTO.getResponse() == null) throw new SteamApiException("User not found");
+        return steamOwnedGameDTO.getResponse().getGames();
     }
 }
