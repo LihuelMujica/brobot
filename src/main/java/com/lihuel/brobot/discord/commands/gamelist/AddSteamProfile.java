@@ -37,14 +37,14 @@ public class AddSteamProfile implements Command {
         return List.of(
                 new OptionData(OptionType.MENTIONABLE, "usuario", "Usuario de discord a vincular")
                         .setRequired(true),
-                new OptionData(OptionType.STRING, "steamId", "ID que quieres vincular")
+                new OptionData(OptionType.STRING, "steamid", "ID que quieres vincular")
                         .setRequired(true)
         );
     }
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
-        String steamId = event.getOption("steamId").getAsString();
+        String steamId = event.getOption("steamid").getAsString();
         User user = event.getOption("usuario").getAsUser();
 
         try {
