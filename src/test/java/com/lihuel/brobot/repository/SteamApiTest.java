@@ -4,14 +4,22 @@ import com.lihuel.brobot.dto.SteamGameDTO;
 import com.lihuel.brobot.dto.SteamProfileDTO;
 import com.lihuel.brobot.exception.SteamApiException;
 import feign.FeignException;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SteamApiTest {
 
-    private final SteamApi steamApi = new SteamApi();
+    private static SteamApi steamApi;
+
+    @BeforeAll
+    static void setup() {
+        String steamKey = System.getenv("STEAM_TOKEN");
+        steamApi = new SteamApi(steamKey);
+    }
+
+
 
     @Test
     void getCounterStrikeGlobalOffensiveDetails() throws SteamApiException {

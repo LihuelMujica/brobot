@@ -17,8 +17,11 @@ import java.util.Map;
 @Repository
 public class SteamApi {
 
-    @Value("${steam.token}")
-    private String STEAM_KEY;
+    private final String STEAM_KEY;
+
+    public SteamApi(@Value("${steam.token}") String steamKey) {
+        STEAM_KEY = steamKey;
+    }
 
     private interface SteamStoreApi {
         @RequestLine("GET /api/appdetails?appids={appid}")
