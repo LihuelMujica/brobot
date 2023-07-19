@@ -23,6 +23,7 @@ public class SteamOwnedGameDTO {
     @Setter
     @RequiredArgsConstructor
     @ToString
+    @AllArgsConstructor
     public static class Game {
         @SerializedName("appid")
         private String appId;
@@ -32,6 +33,10 @@ public class SteamOwnedGameDTO {
 
         @SerializedName("playtime_forever")
         private int playtimeForever;
+
+        public Game(String appId) {
+            this.appId = appId;
+        }
 
         @Override
         public int hashCode() {
