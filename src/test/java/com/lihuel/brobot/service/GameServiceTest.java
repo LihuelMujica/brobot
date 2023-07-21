@@ -65,7 +65,7 @@ class GameServiceTest {
         when(steamApi.getAppDetails("123456")).thenReturn(steamGameDTO);
         when(gameRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
 
-        Game game = gameService.save("https://store.steampowered.com/app/123456/Test_Game/");
+        Game game = gameService.save("https://store.steampowered.com/app/123456/Test_Game/", false);
 
         verify(gameRepository, times(1)).save(any());
         assertEquals("123456", game.getSteamId());
@@ -75,18 +75,18 @@ class GameServiceTest {
 
     @Test
     void saveNoSteamUrl() {
-        assertThrows(IllegalArgumentException.class, () -> gameService.save("https://store.facebook.com"));
+        assertThrows(IllegalArgumentException.class, () -> gameService.save("https://store.facebook.com", false));
     }
 
     @Test
     void saveInvalidUrl() {
-        assertThrows(IllegalArgumentException.class, () -> gameService.save("https://store.steampowered.com/app/"));
+        assertThrows(IllegalArgumentException.class, () -> gameService.save("https://store.steampowered.com/app/", false));
     }
 
     @Test
     void saveWithSteamApiException() throws SteamApiException {
         when(steamApi.getAppDetails("123456")).thenThrow(new SteamApiException("Error"));
-        assertThrows(SteamApiException.class, () -> gameService.save("https://store.steampowered.com/app/123456/Test_Game/"));
+        assertThrows(SteamApiException.class, () -> gameService.save("https://store.steampowered.com/app/123456/Test_Game/", false));
     }
 
     @Test
@@ -103,8 +103,10 @@ class GameServiceTest {
         user.setSteamProfileUrl("https://steamcommunity.com/id/1234");
 
         when(steamApi.getOwnedGames("1234")).thenReturn(Set.of(game1, game2, game3));
-        when(gameRepository.findAllById(any())).thenReturn(games);
-        when(userRepository.findById("1234")).thenReturn(Optional.of(user));
+        when(gameRepository.findAllById(any())).thenAnswer(i -> {
+            List<String> gameIds = (List<String>) i.getArguments()[0];
+            return games.stream().filter(game -> gameIds.contains(game.getSteamId())).collect(Collectors.toList());
+        });        when(userRepository.findById("1234")).thenReturn(Optional.of(user));
 
         List<Game> gamesByDiscordId = gameService.findGamesByDiscordId("1234");
 

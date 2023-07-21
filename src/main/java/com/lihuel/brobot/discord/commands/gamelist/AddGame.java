@@ -34,15 +34,20 @@ public class AddGame implements Command {
     public List<OptionData> getOptions() {
         return List.of(
                 new OptionData(OptionType.STRING, "url", "Ingresa la URL de steam del juego")
-                        .setRequired(true)
+                        .setRequired(true),
+                new OptionData(OptionType.BOOLEAN, "pirateado", "Indica si el juego tiene multiplayer pirata")
+                        .setRequired(false)
         );
     }
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        String url = event.getOption("url").getAsString();
+        Boolean hasPiratedMultiplayer = event.getOption("pirateado") != null && event.getOption("pirateado").getAsBoolean();
+        String pirateMessage = hasPiratedMultiplayer ? "El juego tiene multiplayer pirata" : " el juego no tiene multiplayer pirata";
+        System.out.println(hasPiratedMultiplayer);
         try {
-            String url = event.getOption("url").getAsString();
-            event.reply("Agregando juego a la base de datos: " + gameService.save(url).getName()).queue();
+            event.reply("Agregando juego a la base de datos: " + gameService.save(url, hasPiratedMultiplayer).getName() + pirateMessage).queue();
         } catch (Exception e) {
             event.reply("Error al agregar el juego").queue();
         }

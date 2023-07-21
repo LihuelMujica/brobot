@@ -34,7 +34,7 @@ public class GameServiceImpl implements GameService {
 
 
     @Override
-    public Game save(String steamUrl) throws SteamApiException {
+    public Game save(String steamUrl, Boolean hasPiratedMultiplayer) throws SteamApiException {
         if (!SteamURLUtil.isValidSteamURL(steamUrl)) throw new IllegalArgumentException("La url no es una url de steam válida");
         String steamId = SteamURLUtil.extractAppIDFromSteamURL(steamUrl);
         if (steamId.isEmpty()) throw new IllegalArgumentException("No has ingresado un juego válido");
@@ -43,6 +43,7 @@ public class GameServiceImpl implements GameService {
         game.setSteamId(steamId);
         game.setName(gameDetails.getName());
         game.setSteamUrl(steamUrl);
+        game.setHasPiratedMultiplayer(hasPiratedMultiplayer);
 
         return gameRepository.save(game);
     }
