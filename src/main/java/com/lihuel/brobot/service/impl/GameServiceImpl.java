@@ -1,5 +1,6 @@
 package com.lihuel.brobot.service.impl;
 
+import com.lihuel.brobot.dto.CommonGames;
 import com.lihuel.brobot.dto.SteamGameDTO;
 import com.lihuel.brobot.dto.SteamOwnedGameDTO;
 import com.lihuel.brobot.exception.SteamApiException;
@@ -79,6 +80,35 @@ public class GameServiceImpl implements GameService {
 
     }
 
+    @Override
+    public CommonGames findCommonGames(List<String> discordIds) throws SteamApiException {
+        List<User> users = userRepository.findAllById(discordIds);
+        Set<String> commonGamesIds = new HashSet<>();
+        HashMap<String, Set<String>> ownedGamesIds = new HashMap<>();
+        Set<String> allGamesIds = new HashSet<>();
 
+        for (User user : users) {
+            ownedGamesIds.put(user.getDiscordId(), steamApi.getOwnedGames(user.getSteamUserId()).stream().map(SteamOwnedGameDTO.Game::getAppId).collect(Collectors.toSet()));
+        }
 
+        for (User user : users) {
+            allGamesIds.addAll(ownedGamesIds.get(user.getDiscordId()));
+            if (commonGamesIds.size() == 0) {
+                commonGamesIds.addAll(ownedGamesIds.get(user.getDiscordId()));
+            } else {
+                commonGamesIds.retainAll(ownedGamesIds.get(user.getDiscordId()));
+            }
+        }
+
+        List<Game> commonGames = gameRepository.findAllById(commonGamesIds);
+        List<Game> remotePlayTogetherGames = gameRepository.findBySteamIdInAndHasSteamPlayTogetherIsTrue(allGamesIds);
+        List<Game> piratedGames = gameRepository.findByHasPiratedMultiplayerIsTrue();
+
+        return new CommonGames(commonGames, remotePlayTogetherGames, piratedGames);
+    }
+
+    @Override
+    public List<Game> findPiratedMultiplayerGames() {
+        return gameRepository.findByHasPiratedMultiplayerIsTrue();
+    }
 }
