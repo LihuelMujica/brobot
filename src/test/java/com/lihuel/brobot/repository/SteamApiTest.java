@@ -8,6 +8,9 @@ import feign.FeignException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,6 +31,8 @@ class SteamApiTest {
     void getCounterStrikeGlobalOffensiveDetails() throws SteamApiException {
         SteamGameDTO.GameDetails gameDetails = steamApi.getAppDetails("730").getData();
         assertEquals("Counter-Strike: Global Offensive", gameDetails.getName());
+        List<SteamGameDTO.Category> categories = Arrays.asList(gameDetails.getCategories());
+        assertTrue(categories.stream().anyMatch(category -> Objects.equals(category.getDescription(), "Multijugador")));
     }
 
     @Test

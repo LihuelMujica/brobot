@@ -26,7 +26,7 @@ public class SteamApi {
     }
 
     private interface SteamStoreApi {
-        @RequestLine("GET /api/appdetails?appids={appid}")
+        @RequestLine("GET /api/appdetails?appids={appid}&l=spanish")
         Map<String, SteamGameDTO> getAppDetails(@Param("appid") String appid);
     }
 

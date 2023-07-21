@@ -24,7 +24,22 @@ public class SteamGameDTO {
         private String header_image;
         private Screenshot[] screenshots;
         private PCRequirements pc_requirements;
+        private Category[] categories;
 
+    }
+
+    @Data
+    public static class Category {
+        private int id;
+        private String description;
+
+        public int getId() {
+            return id;
+        }
+
+        public String getDescription() {
+            return description;
+        }
     }
 
     @Data
