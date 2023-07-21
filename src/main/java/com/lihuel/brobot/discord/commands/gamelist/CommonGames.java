@@ -60,16 +60,21 @@ public class CommonGames implements Command {
     public void execute(SlashCommandInteractionEvent event) {
         event.deferReply().queue();
         List<IMentionable> users =  event.getOptionsByType(OptionType.MENTIONABLE).stream().map(OptionMapping::getAsMentionable).toList();
-        List<Game> games;
+        com.lihuel.brobot.dto.CommonGames commonGames;
         try{
-            games = gameService.findGamesInCommon(users.stream().map(IMentionable::getId).toList());
-            System.out.println(games);
+            commonGames = gameService.findCommonGames(users.stream().map(IMentionable::getId).toList());
             StringBuilder sb = new StringBuilder();
             sb.append("Juegos comunes entre ").append(users.stream().map(IMentionable::getAsMention).collect(Collectors.joining(", "))).append(": \n");
-            for (Game game : games) {
+            for (Game game : commonGames.getCommonSteamGames()) {
                 sb.append("- ").append(game.getName()).append("\n");
             }
-            System.out.println(sb.toString());
+
+            sb.append("Juegos disponibles para remote play toegther: \n");
+            for (Game game : commonGames.getRemotePlayTogetherAvailableGames()) {
+                sb.append("- ").append(game.getName()).append("\n");
+            }
+            sb.append("Para ver los juegos piratas que pueden jugar, usa el comando /juegos-piratas");
+
             event.getHook().sendMessage(sb.toString()).queue();
         } catch (SteamApiException e) {
             event.getHook().sendMessage("No se pudo encontrar tu cuenta de steam, prueba con el comando /vincular-steam").queue();
