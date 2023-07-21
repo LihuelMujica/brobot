@@ -1,6 +1,7 @@
 package com.lihuel.brobot.discord.commands.gamelist;
 
 import com.lihuel.brobot.discord.commands.Command;
+import com.lihuel.brobot.model.Game;
 import com.lihuel.brobot.service.GameService;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -44,10 +45,12 @@ public class AddGame implements Command {
     public void execute(SlashCommandInteractionEvent event) {
         String url = event.getOption("url").getAsString();
         Boolean hasPiratedMultiplayer = event.getOption("pirateado") != null && event.getOption("pirateado").getAsBoolean();
-        String pirateMessage = hasPiratedMultiplayer ? "El juego tiene multiplayer pirata" : " el juego no tiene multiplayer pirata";
+        String pirateMessage = hasPiratedMultiplayer ? " el juego tiene multiplayer pirata" : " el juego no tiene multiplayer pirata";
         System.out.println(hasPiratedMultiplayer);
         try {
-            event.reply("Agregando juego a la base de datos: " + gameService.save(url, hasPiratedMultiplayer).getName() + pirateMessage).queue();
+            Game game = gameService.save(url, hasPiratedMultiplayer);
+            String playTogetherMessage = game.getHasSteamPlayTogether() ? " y tiene Steam Play Together" : " y no tiene Steam Play Together";
+            event.reply("Agregando juego a la base de datos: " + gameService.save(url, hasPiratedMultiplayer).getName() + pirateMessage + playTogetherMessage).queue();
         } catch (Exception e) {
             event.reply("Error al agregar el juego").queue();
         }
