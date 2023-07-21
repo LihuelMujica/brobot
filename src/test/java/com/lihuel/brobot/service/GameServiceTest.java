@@ -44,14 +44,14 @@ class GameServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         games = List.of(
-                new Game("123456", false, "Test Game1", "https://store.steampowered.com/app/123456/Test_Game1/"),
-                new Game("1234567", false, "Test Game2", "https://store.steampowered.com/app/1234567/Test_Game2/"),
-                new Game("6543210", false, "Test Game3", "https://store.steampowered.com/app/6543210/Test_Game3/"),
-                new Game("7654321", false, "Test Game4", "https://store.steampowered.com/app/7654321/Test_Game4/"),
-                new Game("76543210", false, "Test Game5", "https://store.steampowered.com/app/76543210/Test_Game5/"),
-                new Game("765432109", false, "Test Game6", "https://store.steampowered.com/app/765432109/Test_Game6/"),
-                new Game("7654321098", false, "Test Game7", "https://store.steampowered.com/app/7654321098/Test_Game7/"),
-                new Game("76543210987", false, "Test Game8", "https://store.steampowered.com/app/76543210987/Test_Game8/")
+                new Game("123456", false, false, "Test Game1", "https://store.steampowered.com/app/123456/Test_Game1/"),
+                new Game("1234567", false, false, "Test Game2", "https://store.steampowered.com/app/1234567/Test_Game2/"),
+                new Game("6543210", false, false, "Test Game3", "https://store.steampowered.com/app/6543210/Test_Game3/"),
+                new Game("7654321", false, false, "Test Game4", "https://store.steampowered.com/app/7654321/Test_Game4/"),
+                new Game("765432109", false, false, "Test Game6", "https://store.steampowered.com/app/765432109/Test_Game6/"),
+                new Game("76543210", false, false, "Test Game5", "https://store.steampowered.com/app/76543210/Test_Game5/"),
+                new Game("7654321098", false, false, "Test Game7", "https://store.steampowered.com/app/7654321098/Test_Game7/"),
+                new Game("76543210987", false, false, "Test Game8", "https://store.steampowered.com/app/76543210987/Test_Game8/")
         );
     }
 
@@ -60,6 +60,7 @@ class GameServiceTest {
         SteamGameDTO.GameDetails gameDetails = new SteamGameDTO.GameDetails();
         gameDetails.setName("Test Game");
         SteamGameDTO steamGameDTO = new SteamGameDTO();
+        gameDetails.setCategories(new SteamGameDTO.Category[] {});
         steamGameDTO.setData(gameDetails);
         steamGameDTO.setSuccess(true);
         when(steamApi.getAppDetails("123456")).thenReturn(steamGameDTO);
