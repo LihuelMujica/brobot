@@ -15,6 +15,7 @@ public class Game {
     @Id
     private String steamId;
     private Boolean hasPiratedMultiplayer;
+    private Boolean hasSteamPlayTogether;
     private String name;
     private String steamUrl;
 

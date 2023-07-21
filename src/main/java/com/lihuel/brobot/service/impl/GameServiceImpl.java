@@ -12,10 +12,7 @@ import com.lihuel.brobot.service.GameService;
 import com.lihuel.brobot.utils.SteamURLUtil;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,11 +36,16 @@ public class GameServiceImpl implements GameService {
         String steamId = SteamURLUtil.extractAppIDFromSteamURL(steamUrl);
         if (steamId.isEmpty()) throw new IllegalArgumentException("No has ingresado un juego válido");
         SteamGameDTO.GameDetails gameDetails = steamApi.getAppDetails(steamId).getData();
+        List<SteamGameDTO.Category> categories = Arrays.stream(gameDetails.getCategories()).toList();
         Game game = new Game();
         game.setSteamId(steamId);
         game.setName(gameDetails.getName());
         game.setSteamUrl(steamUrl);
         game.setHasPiratedMultiplayer(hasPiratedMultiplayer);
+        game.setHasSteamPlayTogether(categories.stream().anyMatch(category -> {
+            String description = category.getDescription();
+            return description.equals("Remote Play Together");
+        }));
 
         return gameRepository.save(game);
     }
